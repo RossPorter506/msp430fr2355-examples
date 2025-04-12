@@ -8,10 +8,10 @@ TODO: These example projects will be adapted from the forked repo, which uses th
 | 00-blink              | Blink onboard Red LED
 | 01-blinkTogether      | Blink onboard Red and Green LEDs together
 | 02-alternateBlink     | Blink onboard Red and Green LEDs in an alternating fashion
-| 03-testSwitch         | TODO: Turn ON/OFF onboard LED using onboard Switch
-| 04-switchToggle       | TODO: Toggle the onboard LED using the onboard Switch
-| 05-switchAlternate    | TODO: Toggle between Red and Green LED using onboard Switch
-| 06-switchInterrupt    | TODO: Toggle LED using external interrupt and low power modes 
+| 03-testSwitch         | Turn ON/OFF onboard LED using onboard Switch
+| 04-switchToggle       | Toggle the onboard LED using the onboard Switch
+| 05-switchAlternate    | Toggle between Red and Green LED using onboard Switch
+| 06-switchInterrupt    | Toggle LED using external interrupt and low power modes 
 | 07-blinkWatchdog      | TODO: Illustrates the Watchdog Timer timeout and reset 
 | 10-timerBlink         | TODO: Use internal timer and low frequency oscillator to blink LED
 | 13-pwmTest            | TODO: Fading effect on onboard Green LED using hardware PWM
