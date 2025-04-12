@@ -5,9 +5,9 @@ TODO: These example projects will be adapted from the forked repo, which uses th
 ## List of Examples
 | Project Name          | Description   |
 | ----------------------|---------------|
-| 00-blink              | TODO: Blink onboard Red LED
-| 01-blinkTogether      | TODO: Blink onboard Red and Green LEDs together
-| 02-alternateBlink     | TODO: Blink onboard Red and Green LEDs in an alternating fashion
+| 00-blink              | Blink onboard Red LED
+| 01-blinkTogether      | Blink onboard Red and Green LEDs together
+| 02-alternateBlink     | Blink onboard Red and Green LEDs in an alternating fashion
 | 03-testSwitch         | TODO: Turn ON/OFF onboard LED using onboard Switch
 | 04-switchToggle       | TODO: Toggle the onboard LED using the onboard Switch
 | 05-switchAlternate    | TODO: Toggle between Red and Green LED using onboard Switch

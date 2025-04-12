@@ -1,22 +1,29 @@
 #include <msp430.h> 
 
+// Let's use some defines to make our code more readable.
+#define RED_LED BIT0
+#define GREEN_LED BIT6
+
 void main(void) {
     WDTCTL = WDTPW | WDTHOLD;		// Stop watchdog timer
-	
-    P1DIR |= (BIT0+BIT6);			// P1.0 (Red LED), P1.1 (Green LED)
+    
+    // P1.0 (Red LED), P6.6 (Green LED) to outputs
+    P1DIR |= RED_LED;
+    P6DIR |= GREEN_LED;
+
+    // Set initial values - red LED on, green LED off.
+    P1OUT |= RED_LED;
+    P6OUT &= ~GREEN_LED;
+
+    // Unlock GPIO
+    PM5CTL0 &= ~LOCKLPM5;
 
     while(1)
     {
-    	volatile unsigned long i;
+        // Toggle LED values using XOR instead of setting and clearing separately
+        P1OUT ^= RED_LED;
+        P6OUT ^= GREEN_LED;
 
-    	P1OUT &= ~BIT6;				//Green LED -> OFF
-    	P1OUT |= BIT0;				//Red LED -> ON
-
-    	for(i = 0; i<10000; i++);	//delay
-
-    	P1OUT &= ~BIT0;				//Red LED -> OFF
-    	P1OUT |= BIT6;				//Green LED -> ON
-
-    	for(i = 0; i<10000; i++);	//delay
+    	__delay_cycles(100000); // 100ms delay
     }
 }
