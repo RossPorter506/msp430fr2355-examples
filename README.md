@@ -5,6 +5,8 @@ TODO: These example projects will be adapted from the forked repo, which uses th
 
 TODO: Move all projects to C99 mode
 
+TODO: Renumber projects. Rename bitBangShift to SpiBitBangShift and move it to before the spiShift project
+
 ## List of Examples
 | Project Name          | Description   |
 | ----------------------|---------------|
@@ -20,7 +22,7 @@ TODO: Move all projects to C99 mode
 | 13-softwarePWM        | TEST: Implementation of PWM using software time delays
 | 14-pwmTest            | TEST: Fading effect on onboard Green LED using hardware PWM
 | 15-timerCapture       | TEST: Uses the Input Capture mode of Timer to measure external signal period
-| 16-adcTest            | TODO: Reads the internal temperature sensor and converts value to Celcius
+| 16-adcTest            | TEST: Reads the internal temperature sensor and converts value to Celcius
 | 17-dcoTest            | TODO: Cycles through calibrated DCO frequencies during runtime
 | 18-adcPWM             | TODO: Use ADC input to control intensity of onboard Green LED
 | 19-adcPWM-lpm         | TODO: Implementation of ADC based PWM control using low power modes
