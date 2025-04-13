@@ -1,22 +1,25 @@
 # MSP430 CCS Code Examples
 Various Code Examples for the MSP430FR2355.
-TODO: These example projects will be adapted from the forked repo, which uses the MSP430G2553 instead. Projects with 'TODO:' below have not yet been adjusted. 
+
+TODO: These example projects will be adapted from the forked repo, which uses the MSP430G2553 instead. Projects with 'TODO:' below have not yet been adjusted. Projects with 'TEST:' have not yet been tested. 
+
+TODO: Move all projects to C99 mode
 
 ## List of Examples
 | Project Name          | Description   |
 | ----------------------|---------------|
-| 00-blink              | Blink onboard Red LED
-| 01-blinkTogether      | Blink onboard Red and Green LEDs together
-| 02-alternateBlink     | Blink onboard Red and Green LEDs in an alternating fashion
-| 03-testSwitch         | Turn ON/OFF onboard LED using onboard Switch
-| 04-switchToggle       | Toggle the onboard LED using the onboard Switch
-| 05-switchAlternate    | Toggle between Red and Green LED using onboard Switch
-| 06-switchInterrupt    | Toggle LED using external interrupt and low power modes 
-| 07-blinkWatchdog      | TODO: Illustrates the Watchdog Timer timeout and reset 
-| 10-timerBlink         | TODO: Use internal timer and low frequency oscillator to blink LED
-| 13-pwmTest            | TODO: Fading effect on onboard Green LED using hardware PWM
-| 14-softwarePWM        | TODO: Implementation of PWM using software time delays
-| 15-timerCapture       | TODO: Uses the Input Capture mode of Timer to measure external signal period
+| 00-blink              | TEST: Blink onboard Red LED
+| 01-blinkTogether      | TEST: Blink onboard Red and Green LEDs together
+| 02-alternateBlink     | TEST: Blink onboard Red and Green LEDs in an alternating fashion
+| 03-testSwitch         | TEST: Turn ON/OFF onboard LED using onboard Switch
+| 04-switchToggle       | TEST: Toggle the onboard LED using the onboard Switch
+| 05-switchAlternate    | TEST: Toggle between Red and Green LED using onboard Switch
+| 06-switchInterrupt    | TEST: Toggle LED using external interrupt and low power modes 
+| 07-blinkWatchdog      | TEST: Illustrates the Watchdog Timer timeout and reset 
+| 10-timerBlink         | TEST: Use internal timer and low frequency oscillator to blink LED
+| 13-pwmTest            | TEST: Fading effect on onboard Green LED using hardware PWM
+| 14-softwarePWM        | TEST: Implementation of PWM using software time delays
+| 15-timerCapture       | TEST: Uses the Input Capture mode of Timer to measure external signal period
 | 16-adcTest            | TODO: Reads the internal temperature sensor and converts value to Celcius
 | 17-dcoTest            | TODO: Cycles through calibrated DCO frequencies during runtime
 | 18-adcPWM             | TODO: Use ADC input to control intensity of onboard Green LED
