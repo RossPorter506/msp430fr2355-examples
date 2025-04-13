@@ -17,8 +17,8 @@ TODO: Move all projects to C99 mode
 | 06-switchInterrupt    | TEST: Toggle LED using external interrupt and low power modes 
 | 07-blinkWatchdog      | TEST: Illustrates the Watchdog Timer timeout and reset 
 | 10-timerBlink         | TEST: Use internal timer and low frequency oscillator to blink LED
-| 13-pwmTest            | TEST: Fading effect on onboard Green LED using hardware PWM
-| 14-softwarePWM        | TEST: Implementation of PWM using software time delays
+| 13-softwarePWM        | TEST: Implementation of PWM using software time delays
+| 14-pwmTest            | TEST: Fading effect on onboard Green LED using hardware PWM
 | 15-timerCapture       | TEST: Uses the Input Capture mode of Timer to measure external signal period
 | 16-adcTest            | TODO: Reads the internal temperature sensor and converts value to Celcius
 | 17-dcoTest            | TODO: Cycles through calibrated DCO frequencies during runtime
