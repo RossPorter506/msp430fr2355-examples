@@ -9,8 +9,8 @@ const uint16_t pins[] = {BIT0, BIT1, BIT2, BIT3, BIT4, BIT5, BIT6, BIT7};
 uint16_t lcdPins[4], rsPin, enPin;
 uint8_t lcdPort, rsPort, enPort;
 
-#define pout(P)		( (volatile uint8_t *)( ports[P] ) )
-#define pdir(P)     ( (volatile uint8_t *)( dirs[P] ) )
+#define POUT(P)		( (volatile uint8_t *)( ports[P] ) )
+#define PDIR(P)     ( (volatile uint8_t *)( dirs[P] ) )
 
 // Delay function for producing delay in 0.1 ms increments
 void delay(uint8_t t)
@@ -24,7 +24,7 @@ void delay(uint8_t t)
 void pulseEN(void)
 {
 	volatile uint8_t *enout;
-	enout = pout(enPort);
+	enout = POUT(enPort);
 
 	*enout |= enPin;
 	delay(1);
@@ -36,7 +36,7 @@ void pulseEN(void)
 void write4bits(uint8_t value)
 {
 	volatile uint8_t *datout;
-	datout = pout(lcdPort);
+	datout = POUT(lcdPort);
 	uint8_t i;
 	for(i = 0; i < 4; i++)
 	{
@@ -52,7 +52,7 @@ void write4bits(uint8_t value)
 void lcd_write(uint8_t value, uint8_t mode)
 {
 	volatile uint8_t *rsout;
-	rsout = pout(rsPort);
+	rsout = POUT(rsPort);
 
 	if(mode == CMD)
 		*rsout &= ~rsPin;				// Set RS -> LOW for Command mode
@@ -108,12 +108,18 @@ void lcd_init(uint8_t dat_port, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
 #endif
 
 	// Set SEL bits to GPIO mode for P2.6 & P2.7
-	if(dat_port == 2)
-		P2SEL &= ~(lcdPins[0] + lcdPins[1] + lcdPins[2] + lcdPins[3]);
-	if(rs_port == 2)
-		P2SEL &= ~rsPin;
-	if(en_port == 2)
-		P2SEL &= ~enPin;
+	if(dat_port == 2){
+		P2SEL0 &= ~(lcdPins[0] + lcdPins[1] + lcdPins[2] + lcdPins[3]);
+	    P2SEL1 &= ~(lcdPins[0] + lcdPins[1] + lcdPins[2] + lcdPins[3]);
+	}
+	if(rs_port == 2){
+		P2SEL0 &= ~rsPin;
+	    P2SEL1 &= ~rsPin;
+	}
+	if(en_port == 2){
+		P2SEL0 &= ~enPin;
+	    P2SEL1 &= ~enPin;
+	}
 
 	lcdPort = dat_port-1;
 	rsPort = rs_port-1;
@@ -126,13 +132,13 @@ void lcd_init(uint8_t dat_port, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7, 
 	volatile uint8_t *rsout;
 	volatile uint8_t *enout;
 
-	datdir = pdir(lcdPort);
-	rsdir = pdir(rsPort);
-	endir = pdir(enPort);
+	datdir = PDIR(lcdPort);
+	rsdir = PDIR(rsPort);
+	endir = PDIR(enPort);
 
-	datout = pout(lcdPort);
-	rsout = pout(rsPort);
-	enout = pout(enPort);
+	datout = POUT(lcdPort);
+	rsout = POUT(rsPort);
+	enout = POUT(enPort);
 
 	*datdir |= (lcdPins[0] + lcdPins[1] + lcdPins[2] + lcdPins[3]);
 	*rsdir |= rsPin;

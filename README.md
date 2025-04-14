@@ -32,7 +32,7 @@ TODO: Explain `__bis_SR_register()` and `__bic_SR_register()` intrinsics, how it
 | 21-helloWorld         | TEST: Prints the string "Hello World !" on the UART link
 | 22-uartPrintNum       | TEST: Converts an integer value to string and prints it on the UART link
 | 23-uartADC            | TEST: Displays the ADC value on the UART link
-| 24-spiShift           | TODO: Use SPI protocol to send data to a shift register
-| 25-i2cTempSensor      | TODO: Read temperature values from a LM75 sensor over I2C
-| 26-bitBangShift       | TODO: Implements SPI communication with shift register by bit banging GPIO
-| 27-helloLCD           | TODO: Connects to a 16x2 LCD using 4-bit mode, generic library .c & .h files
+| 24-spiShift           | TEST: Use SPI protocol to send data to a shift register
+| 25-i2cTempSensor      | TEST: Read temperature values from a LM75 sensor over I2C
+| 26-bitBangShift       | TEST: Implements SPI communication with shift register by bit banging GPIO
+| 27-helloLCD           | TEST: Connects to a 16x2 LCD using 4-bit mode, generic library .c & .h files

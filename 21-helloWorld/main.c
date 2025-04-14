@@ -7,6 +7,8 @@ void print(char text[]) {
 	uint8_t i = 0;
 	while(text[i] != '\0') {            // Check for end of string
 		while (!(UCA0IFG & UCTXIFG));	// Wait for any ongoing transmissions to finish
+		// NOTE: You might be tempted to check for completion by checking
+		// UCTXCPTIFG instead, but this doesn't work for UART: See Errata USCI42.
 		UCA0TXBUF = text[i];			// TX -> current char
 		i++;							// Increment counter
 	}

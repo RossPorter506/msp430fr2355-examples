@@ -27,5 +27,7 @@ void main(void)
 #pragma vector=EUSCI_A0_VECTOR			// UART RX Interrupt Vector
 __interrupt void USCIA0RX_ISR(void) {
 	while (!(UCA0IFG & UCTXIFG));		// Wait for any ongoing transmission to finish
+	// NOTE: You might be tempted to check for completion by checking
+	// UCTXCPTIFG instead, but this doesn't work for UART: See Errata USCI42.
 	UCA0TXBUF = UCA0RXBUF + 1;			// TX -> Received Char + 1
 }

@@ -13,9 +13,10 @@
 
 void main(void)
 {
-	WDTCTL = WDTPW + WDTHOLD; // stop watchdog
+	WDTCTL = WDTPW + WDTHOLD; // Stop watchdog
 
-	// lcd_init(data_port, d4, d5, d6, d7, rs_port, rs, en_port, en)
+	PM5CTL0 &= ~LOCKLPM5;     // Unlock GPIO
+
 	lcd_init(DAT_PORT, D4, D5, D6, D7, RS_PORT, RS, EN_PORT, EN);
 	lcd_setCursor(0,6);
 	lcd_print("CEDT");
