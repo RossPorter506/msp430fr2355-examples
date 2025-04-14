@@ -2,31 +2,30 @@
 
 void main(void)
 {
-	WDTCTL = WDTPW + WDTHOLD;			// Stop Watchdog
-	if (CALBC1_1MHZ==0xFF)				// Check if calibration constant erased
-	{
-		while(1);						// do not load program
-	}
-	DCOCTL = 0;							// Select lowest DCO settings
-	BCSCTL1 = CALBC1_1MHZ;				// Set DCO to 1 MHz
-	DCOCTL = CALDCO_1MHZ;
+	WDTCTL = WDTPW + WDTHOLD;			// Stop watchdog
 
-	P1SEL = BIT1 + BIT2 ;				// Select UART RX/TX function on P1.1,P1.2
-	P1SEL2 = BIT1 + BIT2;
+	// Select UART RX / TX function on P1.6 / P1.7
+	// See Table 6-63 in MSP430FR2355 datasheet
+	P1SEL0 = BIT6 + BIT7;
 
-	UCA0CTL1 |= UCSSEL_2;				// UART Clock -> SMCLK
-	UCA0BR0 = 104;						// Baud Rate Setting for 1MHz 9600
-	UCA0BR1 = 0;						// Baud Rate Setting for 1MHz 9600
-	UCA0MCTL = UCBRS_1;					// Modulation Setting for 1MHz 9600
-	UCA0CTL1 &= ~UCSWRST;				// Initialize UART Module
-	IE2 |= UCA0RXIE;					// Enable RX interrupt
+	// Configure UART for 9600 baud with a 1MHz clock
+	// See Table 22-5 in the user manual for details
+	UCA0CTL1 |= UCSWRST;                // Put UART module into reset mode for configuration
+	UCA0CTLW0 |= UCSSEL_2;		        // UART Clock -> SMCLK
+	UCA0MCTLW_H = 0x20;                 // UCBRSx value
+	UCA0MCTLW_L = UCBRF_8 + UCOS16;     // UCBRFx value, oversampling mode on
+	UCA0BRW = 6;                        // UCBRx value
+	UCA0CTL1 &= ~UCSWRST;               // Initialise UART module
+
+	PM5CTL0 &= ~LOCKLPM5;               // Unlock GPIO
+
+	UCA0IE = UCRXIE;                    // Enable RX interrupt
 
 	__bis_SR_register(LPM0_bits + GIE);	// Enter LPM0, Enable Interrupt
 }
 
-#pragma vector=USCIAB0RX_VECTOR			// UART RX Interrupt Vector
-__interrupt void USCI0RX_ISR(void)
-{
-	while (!(IFG2&UCA0TXIFG));			// Check if TX is ongoing
+#pragma vector=EUSCI_A0_VECTOR			// UART RX Interrupt Vector
+__interrupt void USCIA0RX_ISR(void) {
+	while (!(UCA0IFG & UCTXIFG));		// Wait for any ongoing transmission to finish
 	UCA0TXBUF = UCA0RXBUF + 1;			// TX -> Received Char + 1
 }

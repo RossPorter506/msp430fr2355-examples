@@ -7,6 +7,8 @@ TODO: Move all projects to C99 mode
 
 TODO: Renumber projects. Rename bitBangShift to SpiBitBangShift and move it to before the spiShift project
 
+TODO: Explain `__bis_SR_register()` and `__bic_SR_register()` intrinsics, how it's a CPU register and thus doesn't have a memory address that can be written to like memory-mapped peripherals
+
 ## List of Examples
 | Project Name          | Description   |
 | ----------------------|---------------|
@@ -23,13 +25,13 @@ TODO: Renumber projects. Rename bitBangShift to SpiBitBangShift and move it to b
 | 14-pwmTest            | TEST: Fading effect on onboard Green LED using hardware PWM
 | 15-timerCapture       | TEST: Uses the Input Capture mode of Timer to measure external signal period
 | 16-adcTest            | TEST: Reads the internal temperature sensor and converts value to Celcius
-| 17-dcoTest            | TODO: Cycles through calibrated DCO frequencies during runtime
-| 18-adcPWM             | TODO: Use ADC input to control intensity of onboard Green LED
-| 19-adcPWM-lpm         | TODO: Implementation of ADC based PWM control using low power modes
-| 20-uartEcho           | TODO: Implements UART link at a baud rate of 9600. Echoes RX char + 1
-| 21-helloWorld         | TODO: Prints the string "Hello World !" on the UART link
-| 22-uartPrintNum       | TODO: Converts an integer value to string and prints it on the UART link
-| 23-uartADC            | TODO: Displays the ADC value on the UART link
+| 17-dcoTest            | TEST: Cycles through calibrated DCO frequencies during runtime
+| 18-adcPWM             | TEST: Use ADC input to control intensity of onboard Green LED
+| 19-adcPWM-lpm         | TEST: Implementation of ADC based PWM control using low power modes
+| 20-uartEcho           | TEST: Implements UART link at a baud rate of 9600. Echoes RX char + 1
+| 21-helloWorld         | TEST: Prints the string "Hello World !" on the UART link
+| 22-uartPrintNum       | TEST: Converts an integer value to string and prints it on the UART link
+| 23-uartADC            | TEST: Displays the ADC value on the UART link
 | 24-spiShift           | TODO: Use SPI protocol to send data to a shift register
 | 25-i2cTempSensor      | TODO: Read temperature values from a LM75 sensor over I2C
 | 26-bitBangShift       | TODO: Implements SPI communication with shift register by bit banging GPIO

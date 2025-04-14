@@ -1,38 +1,44 @@
 #include <msp430.h>
 
-#define GREEN	BIT6
-#define AIN		BIT0
-unsigned int adcValue;
+#define LED     BIT6                            // Connect an external LED on P1.6
+#define AIN     BIT1                            // Present an analog voltage on pin 1.1
 
-void main(void)
-{
+void main(void) {
 	WDTCTL = WDTPW + WDTHOLD;                 	// Stop watchdog timer
 
-	ADC10AE0 |= AIN;                         	// P1.0 ADC option select
-	ADC10CTL1 = INCH_0 + ADC10DIV_3;         	// ADC Channel -> 0 (P1.0), CLK/4
-	ADC10CTL0 = SREF_0 + ADC10SHT_3 + REFON + ADC10ON + ADC10IE;
-												// Ref -> Vcc, 64 CLK S&H, Interrupt Enabled
-	P1DIR |= GREEN;								// Green LED -> Output
-	P1SEL |= GREEN;								// Green LED -> Select Timer Output
+	ADCMCTL0 = ADCSREF_0 + ADCINCH1;            // VCC as reference, A0 as ADC input
+	ADCCTL1 = ADCDIV_3;                         // ADC clock div / 4
+	ADCIE = ADCIE;                              // Enable interrupts
+	ADCCTL0 = ADCSHT_4 + ADCON + ADCENC;        // Sample and hold for 64 clock cycles, enable ADC
 
-	CCR0 = 1023;								// Set Timer0 PWM Period
-    CCTL0 |= CCIE;								// Enable Overflow Interrupt
-	CCTL1 = OUTMOD_7;							// Set TA0.1 Waveform Mode
-	CCR1 = 0;									// Set TA0.1 PWM duty cycle
-	TACTL = TASSEL_2 + MC_1;					// Timer Clock -> SMCLK, Mode -> Up Count
+	// P1.6 as output controlled by timer module
+    P1DIR |= LED;
+    P1SEL0 &= ~LED;
+    P1SEL1 |= LED;
 
-   	__bis_SR_register(LPM0_bits + GIE);			// Goto LPM0, Enable CPU Interrupt
+    // P1.1 as ADC input
+    P1SEL0 |= AIN;
+    P1SEL1 |= AIN;
+
+    TB0CCR0 = 1023;								// Set Timer0 PWM Period
+    TB0CCTL0 |= CCIE;							// Enable Overflow Interrupt
+	TB0CCTL1 = OUTMOD_7;						// Set TB0.1 Waveform Mode
+	TB0CCR1 = 0;								// Set TB0.1 PWM toggle point
+	TB0CTL = TBSSEL_2 + MC_1;					// Timer Clock -> SMCLK, Mode -> Count up
+
+	PM5CTL0 &= ~LOCKLPM5;                       // Unlock GPIO
+
+   	__bis_SR_register(LPM0_bits + GIE);			// Go into LPM0, enable CPU interrupts
 }
 
-#pragma vector=ADC10_VECTOR						// ADC Conversion Complete Interrupt Vector
-__interrupt void ADC10_ISR (void)
-{
-	CCR1 = ADC10MEM;							// Set Duty Cycle = ADC Value
+#pragma vector=ADC_VECTOR						// ADC Conversion Complete Interrupt Vector
+__interrupt void ADC_ISR (void) {
+	TB0CCR1 = ADCMEM0;							// Set duty cycle = ADC value
 }
 
-#pragma vector = TIMER0_A0_VECTOR				// CCR0 Interrupt Vector
-__interrupt void CCR0_ISR(void)
-{
-	if(!(ADC10CTL1 & ADC10BUSY))				// Check if ADC Conversion is in progress
-		ADC10CTL0 |= ENC + ADC10SC;             // Sampling and conversion start
+#pragma vector = TIMER0_B0_VECTOR				// TB0CCR0 interrupt vector
+__interrupt void CCR0_ISR(void) {
+    // If the ADC is idle start a new conversion
+	if(!(ADCCTL1 & ADCBUSY))
+		ADCCTL0 |= ADCSC;
 }

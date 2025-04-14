@@ -1,63 +1,62 @@
 #include <msp430.h>
+#include <stdint.h>
 
-void print(char *text)
-{
-	unsigned int i = 0;
-	while(text[i] != '\0')
-	{
-		while (!(IFG2&UCA0TXIFG));		// Check if TX is ongoing
-		UCA0TXBUF = text[i];			// TX -> Received Char + 1
-		i++;
-	}
+void print(char text[]) {
+    uint16_t i = 0;
+    while(text[i] != '\0') {            // Check for end of string
+        while (!(UCA0IFG & UCTXIFG));   // Wait for any ongoing transmissions to finish
+        UCA0TXBUF = text[i];
+        i++;                            // Increment counter
+    }
 }
 
-void printNumber(unsigned int num)
-{
-	char buf[6];
-	char *str = &buf[5];
+void printNumber(uint16_t num) {
+    char buf[6];
+    buf[5] = '\0';                      // Ensure string is null-terminated
+    char* str = &buf[4];
 
-	*str = '\0';
+    do {
+        uint16_t m = num;
+        num /= 10;
+        uint8_t digit = (m - 10*num);   // Extract least significant digit
+        char c = digit + '0';           // Convert digit to ASCII
+        *str = c;                       // Store character in buffer
+        str--;                          // Point to next slot in the buffer
+    } while(num);
 
-	do
-	{
-		unsigned long m = num;
-		num /= 10;
-		char c = (m - 10 * num) + '0';
-		*--str = c;
-	} while(num);
-
-	print(str);
+    print(str);
 }
 
 void main(void)
 {
-	WDTCTL = WDTPW + WDTHOLD;			// Stop Watchdog
-	if (CALBC1_1MHZ==0xFF)				// Check if calibration constant erased
-	{
-		while(1);						// do not load program
-	}
-	DCOCTL = 0;							// Select lowest DCO settings
-	BCSCTL1 = CALBC1_1MHZ;				// Set DCO to 1 MHz
-	DCOCTL = CALDCO_1MHZ;
+	WDTCTL = WDTPW + WDTHOLD;			        // Stop Watchdog
 
-	P1SEL = BIT1 + BIT2 ;				// Select UART RX/TX function on P1.1,P1.2
-	P1SEL2 = BIT1 + BIT2;
+	// Select UART RX / TX function on P1.6 / P1.7
+    // See Table 6-63 in MSP430FR2355 datasheet
+    P1SEL0 = BIT6 + BIT7;
 
-	UCA0CTL1 |= UCSSEL_2;				// UART Clock -> SMCLK
-	UCA0BR0 = 104;						// Baud Rate Setting for 1MHz 9600
-	UCA0BR1 = 0;						// Baud Rate Setting for 1MHz 9600
-	UCA0MCTL = UCBRS_1;					// Modulation Setting for 1MHz 9600
-	UCA0CTL1 &= ~UCSWRST;				// Initialize UART Module
+    // P1.5 as ADC input
+    P1SEL0 = BIT5;
+    P1SEL1 = BIT5;
 
-	ADC10AE0 |= BIT5;                         	// P1.5 ADC option select
-	ADC10CTL1 = INCH_5;         				// ADC Channel -> 1 (P1.1)
-	ADC10CTL0 = SREF_0 + ADC10SHT_3 + ADC10ON;	// Ref -> Vcc, 64 CLK S&H
+    // Configure UART for 9600 baud with a 1MHz clock
+    // See Table 22-5 in the user manual for details
+    UCA0CTL1 |= UCSWRST;                        // Put UART module into reset mode for configuration
+    UCA0CTLW0 |= UCSSEL_2;                      // UART Clock -> SMCLK
+    UCA0MCTLW_H = 0x20;                         // UCBRSx value
+    UCA0MCTLW_L = UCBRF_8 + UCOS16;             // UCBRFx value, oversampling mode on
+    UCA0BRW = 6;
+    UCA0CTL1 &= ~UCSWRST;                       // Initialise UART module
 
-	while(1)
-	{
-		ADC10CTL0 |= ENC + ADC10SC;             // Sampling and conversion start
-		while(ADC10CTL1 & ADC10BUSY);			// Wait for conversion to end
-		unsigned int adcVal = ADC10MEM;			// Read ADC Value
+    ADCMCTL0 = ADCSREF_0 + ADCINCH_5;           // VCC as reference, ADC channel 5 as input (P1.5)
+    ADCCTL0 = ADCSHT_4 + ADCON + ADCENC;        // sample and hold for 64 clock cycles, enable ADC.
+
+    PM5CTL0 &= ~LOCKLPM5;                       // Unlock GPIO
+
+	while(1) {
+		ADCCTL0 |= ADCSC;                       // Sampling and conversion start
+		while(ADCCTL1 & ADCBUSY);			    // Wait for conversion to end
+		uint16_t adcVal = ADCMEM0;			    // Read ADC Value
 		printNumber(adcVal);					// Print value on UART
 		print("\r\n");							// Print newline
 		__delay_cycles(10000);

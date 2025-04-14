@@ -1,41 +1,39 @@
 #include <msp430.h>
+#include <stdint.h>
 
-char message[] = { "Hello World ! \r\n" };
+char message[] = "Hello World! \r\n";
 
-void print(char *text)
-{
-	unsigned int i = 0;
-	while(text[i] != '\0')				// Check for end of string
-	{
-		while (!(IFG2&UCA0TXIFG));		// Check if TX is ongoing
+void print(char text[]) {
+	uint8_t i = 0;
+	while(text[i] != '\0') {            // Check for end of string
+		while (!(UCA0IFG & UCTXIFG));	// Wait for any ongoing transmissions to finish
 		UCA0TXBUF = text[i];			// TX -> current char
 		i++;							// Increment counter
 	}
 }
 
-void main(void)
-{
-	WDTCTL = WDTPW + WDTHOLD;			// Stop Watchdog
-	if (CALBC1_1MHZ==0xFF)				// Check if calibration constant erased
-	{
-		while(1);						// do not load program
-	}
-	DCOCTL = 0;							// Select lowest DCO settings
-	BCSCTL1 = CALBC1_1MHZ;				// Set DCO to 1 MHz
-	DCOCTL = CALDCO_1MHZ;
+void main(void) {
+	WDTCTL = WDTPW + WDTHOLD;			// Stop watchdog
 
-	P1SEL = BIT1 + BIT2 ;				// Select UART RX/TX function on P1.1,P1.2
-	P1SEL2 = BIT1 + BIT2;
+	// Select UART RX / TX function on P1.6 / P1.7
+    // See Table 6-63 in MSP430FR2355 datasheet
+    P1SEL0 = BIT6 + BIT7;
 
-	UCA0CTL1 |= UCSSEL_2;				// UART Clock -> SMCLK
-	UCA0BR0 = 104;						// Baud Rate Setting for 1MHz 9600
-	UCA0BR1 = 0;						// Baud Rate Setting for 1MHz 9600
-	UCA0MCTL = UCBRS_1;					// Modulation Setting for 1MHz 9600
-	UCA0CTL1 &= ~UCSWRST;				// Initialize UART Module
-	
-	while(1)
-	{
+    // Configure UART for 9600 baud with a 1MHz clock
+    // See Table 22-5 in the user manual for details
+    UCA0CTL1 |= UCSWRST;                // Put UART module into reset mode for configuration
+    UCA0CTLW0 |= UCSSEL_2;              // UART Clock -> SMCLK
+    UCA0MCTLW_H = 0x20;                 // UCBRSx value
+    UCA0MCTLW_L = UCBRF_8 + UCOS16;     // UCBRFx value, oversampling mode on
+    UCA0BRW = 6;
+    UCA0CTL1 &= ~UCSWRST;               // Initialise UART module
+
+    PM5CTL0 &= ~LOCKLPM5;               // Unlock GPIO
+
+    UCA0IE = UCRXIE;                    // Enable RX interrupt
+
+	while(1) {
 		print(message);
-		__delay_cycles(100000);
+		__delay_cycles(100000);         // 100ms pause
 	}
 }

@@ -1,30 +1,35 @@
 #include <msp430.h>
 
-#define GREEN	BIT6
-#define AIN		BIT1
+#define LED 	BIT6                            // Connect an external LED on P1.6
+#define AIN     BIT1                            // Present an analog voltage on pin 1.1
 
-void main(void)
-{
+void main(void) {
 	WDTCTL = WDTPW + WDTHOLD;                 	// Stop watchdog timer
 
-	ADC10AE0 |= AIN;                         	// P1.1 ADC option select
-	ADC10CTL1 = INCH_1;         				// ADC Channel -> 1 (P1.1)
-	ADC10CTL0 = SREF_0 + ADC10SHT_3 + ADC10ON;	// Ref -> Vcc, 64 CLK S&H
+	ADCMCTL0 = ADCSREF_0 + ADCINCH1;            // VCC as reference, A1 as ADC input
+	ADCCTL0 = ADCSHT_4 + ADCON + ADCENC;        // Sample and hold for 64 clock cycles, enable ADC
 
-	P1DIR |= GREEN;								// Green LED -> Output
-	P1SEL |= GREEN;								// Green LED -> Select Timer Output
+	// P1.6 as output controlled by timer module
+	P1DIR |= LED;
+	P1SEL0 &= ~LED;
+	P1SEL1 |= LED;
 
-	CCR0 = 1023;								// Set Timer0 PWM Period
-	CCTL1 = OUTMOD_7;							// Set TA0.1 Waveform Mode
-	CCR1 = 0;									// Set TA0.1 PWM duty cycle
-	TACTL = TASSEL_2 + MC_1;					// Timer Clock -> SMCLK, Mode -> Up Count
+	// P1.1 as ADC input
+	P1SEL0 |= AIN;
+	P1SEL1 |= AIN;
 
-	while(1)
-	{
-		ADC10CTL0 |= ENC + ADC10SC;             // Sampling and conversion start
+	TB0CCR0 = 1023;								// Set Timer0 PWM Period
+	TB0CCTL1 = OUTMOD_7;						// Set TB0.1 Waveform Mode: Reset/Set
+	TB0CCR1 = 0;								// Set TB0.1 PWM toggle point
+	TB0CTL = TBSSEL_2 + MC_1;					// Timer Clock -> SMCLK, Mode -> Count up
 
-		while(ADC10CTL1 & ADC10BUSY);			// Wait for conversion to end
+	PM5CTL0 &= ~LOCKLPM5;                       // Unlock GPIO
+
+	while(1) {
+		ADCCTL0 |= ADCSC;                       // Start ADC conversion
+
+		while(ADCCTL1 & ADCBUSY);			    // Wait for conversion to end
 	
-		CCR1 = ADC10MEM;						// Set Duty Cycle = ADC Value
+		TB0CCR1 = ADCMEM0;						// Set Duty Cycle = ADC Value
 	}
 }
