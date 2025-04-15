@@ -3,8 +3,6 @@ Various Code Examples for the MSP430FR2355.
 
 TODO: These example projects will be adapted from the forked repo, which uses the MSP430G2553 instead. Projects with 'TODO:' below have not yet been adjusted. Projects with 'TEST:' have not yet been tested. Projects with 'DOC:' have been tested to work, but probably need a second pair of eyes to add explanations where necessary. 
 
-TODO: Move all projects to C99 mode
-
 TODO: Renumber projects. Rename bitBangShift to SpiBitBangShift and move it to before the spiShift project
 
 TODO: Explain `__bis_SR_register()` and `__bic_SR_register()` intrinsics, how it's a CPU register and thus doesn't have a memory address that can be written to like memory-mapped peripherals
