@@ -13,16 +13,15 @@ void main(void) {
     // Unlock GPIO
     PM5CTL0 &= ~LOCKLPM5;
 
-    while(1)
-    {
-        P1OUT &= ~BIT6;	    // Green LED -> OFF
-        P6OUT |= BIT0;		// Red LED -> ON
+    while(1) {
+        P1OUT &= ~BIT0;	    // Green LED -> OFF
+        P6OUT &= ~BIT6;		// Red LED -> OFF
 
         // Software delay. Delay for 20,000 CPU cycles.
         // Default CPU freq is 1MHz, so this is 100k/1MHz = 100ms
         __delay_cycles(100000);
 
-        P1OUT &= ~BIT0;		// Red LED -> OFF
+        P1OUT |= BIT0;		// Red LED -> ON
         P6OUT |= BIT6;		// Green LED -> ON
 
         __delay_cycles(100000);

@@ -37,12 +37,12 @@ void main(void) {
 	 at runtime we can control how much of the time the output spends high vs low.
 
 	                                      v--------- PWM toggle point
-	                                             v-- PWM max point
+	                                             v-- PWM period
 	 Values: |----------------------------T------|-----------------------------T------|
 	 Output: _____________________________|‾‾‾‾‾‾|_____________________________|‾‾‾‾‾‾|
 
 	 The MSP430 Reset/Set mode (see Table 14-4 in the user manual) is exactly what we need for this:
-	 In the Reset/Set mode, CCR0 stores the PWM maximum set point. CCR1 through CCR6 can each hold a separate toggle point.
+	 In the Reset/Set mode, CCR0 stores the PWM period. CCR1 through CCR6 can each hold a separate toggle point.
 	 In our case we only want one PWM output so we'll only use CCR1, but we could control 5 other pins with Timer B0 if we needed to.
     */
 
@@ -54,12 +54,11 @@ void main(void) {
 	PM5CTL0 &= ~LOCKLPM5;                   // Unlock GPIO
 
 	while(1) {
-		uint16_t i;
-		for(i = 0; i < PWM_PERIOD; i++) {
+		for(uint16_t i = 0; i < PWM_PERIOD; i++) {
 			TB0CCR1 = i;						// Increase duty cycle from min to max
 			__delay_cycles(10*PWM_PERIOD);
 		}
-		for(i = PWM_PERIOD; i > 0; i--) {
+		for(uint16_t i = PWM_PERIOD; i > 0; i--) {
 			TB0CCR1 = i;						// Decrease duty cycle from max to min
 			__delay_cycles(10*PWM_PERIOD);
 		}

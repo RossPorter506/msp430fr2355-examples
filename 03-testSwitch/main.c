@@ -12,7 +12,7 @@ void main(void) {
     we should use a pullup resistor to pull the pin high when it isn't shorted to ground through the switch.
 
     If a pin is configured as an input and its PxREN bit is also set, then PxOUT controls whether 
-    a pullup or pulldown resistor is connected:
+    a pullup or pulldown resistor is connected. Table 8-1 from the 'MSP430FR4xx and MSP430FR2xx Family User's Guide':
     PxDIR   PxREN   PxOUT   I/O Configuration
     0       0       x       Input
     0       1       0       Input with pulldown resistor

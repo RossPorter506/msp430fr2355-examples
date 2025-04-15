@@ -1,4 +1,6 @@
 /*
+ This example requires an external LED (and suitable current-limiting resistor) on P1.6
+
  This example generates a Pulse Width Modulation (PWM) output to drive an external LED.
  PWM is a way to drive a component at less than 100% intensity using only high or low values by
  rapidly turning the component on and off. If done fast enough this is invisible to the user.
@@ -15,7 +17,17 @@
  |‾‾|______________________________________|‾‾|______________________________________
 
  In this example we show how to implement this manually in software.
- The next example will show how to use the timer peripheral to do this.
+
+ In order to implement PWM control, we need two set points - one denotes the maximum PWM point,
+ and another denotes the toggle point at which the output will change. By changing this second set point
+ at runtime we can control how much of the time the output spends high vs low.
+
+                                      v--------- PWM toggle point
+                                             v-- PWM period
+ Values: |----------------------------T------|-----------------------------T------|
+ Output: _____________________________|‾‾‾‾‾‾|_____________________________|‾‾‾‾‾‾|
+
+ In the code below PWM_PERIOD is the, well, PWM period. In the main loop `onTime` is the toggle point.
 */
 #include <msp430.h> 
 #include <stdint.h>
@@ -38,18 +50,17 @@ void main(void) {
     PM5CTL0 &= ~LOCKLPM5;           // Unlock GPIO
 
     while(1) {
-    	uint16_t on_time;
-    	for(on_time = 1; on_time < PWM_PERIOD; on_time++) {     // Increasing intensity
+    	for(uint16_t onTime = 1; onTime < PWM_PERIOD; onTime++) {     // Increasing intensity
    			P1OUT |= LED;			                            // LED ON
-   			delay(on_time);				                        // Delay for ON time
+   			delay(onTime);				                        // Delay for ON time
    			P1OUT &= ~LED;		                                // LED OFF
-   			delay(PWM_PERIOD-on_time);			                // OFF time = Period - ON time
+   			delay(PWM_PERIOD-onTime);			                // OFF time = Period - ON time
     	}
-    	for(on_time = PWM_PERIOD; on_time > 1; on_time--) {     // Decreasing intensity
+    	for(uint16_t onTime = PWM_PERIOD; onTime > 1; onTime--) {     // Decreasing intensity
    			P1OUT |= LED;			                            // LED ON
-   			delay(on_time);				                        // Delay for ON time
+   			delay(onTime);				                        // Delay for ON time
    			P1OUT &= ~LED;		                                // LED OFF
-   			delay(PWM_PERIOD-on_time);			                // OFF time = Period - ON time
+   			delay(PWM_PERIOD-onTime);			                // OFF time = Period - ON time
     	}
     }
 }

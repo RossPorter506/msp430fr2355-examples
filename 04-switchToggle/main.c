@@ -8,9 +8,10 @@ void main(void) {
 
     P1DIR |= LED;					// Set LED pin -> Output
 
+    // Set P2.3 as input with pullup
     P2DIR &= ~SW;					// Set SW pin -> Input
-    P2REN |= SW;					// Enable Resistor for SW pin
-    P2OUT |= SW;					// Select Pull Up for SW pin
+    P2REN |= SW;					// Enable pull resistor for SW pin
+    P2OUT |= SW;					// Select pullup for SW pin
 
     // Unlock GPIO
     PM5CTL0 &= ~LOCKLPM5;

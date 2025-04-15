@@ -1,3 +1,7 @@
+
+// Note: Sometimes the button doesn't light up or only lights up briefly when the button is pressed.
+// Why do you think this is? How could you solve it?
+
 #include <msp430.h> 
 
 #define SW		BIT3					// Switch -> P2.3
