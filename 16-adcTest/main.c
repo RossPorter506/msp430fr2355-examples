@@ -12,6 +12,7 @@ void main(void) {
 
 	PMMCTL2 |= TSENSOREN + INTREFEN;            // Enable internal temp sensor and 1.5V reference
 
+	// TODO: Mention temp sensor minimum sample time
     ADCMCTL0 |= ADCSREF_1 + ADCINCH_12;         // Use internal 1.5V ref, input channel 12 (internal temp sensor)
     ADCCTL1 |= ADCDIV_3 + ADCSHP;               // Divide input clock by 4
     ADCCTL2 &= ~ADCRES;                         // Clear bits

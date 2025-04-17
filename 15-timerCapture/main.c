@@ -26,9 +26,10 @@ void main(void) {
 
     PM5CTL0 &= ~LOCKLPM5;                           // Unlock GPIO
 
+    // TODO: Add more explanations
     // Capture mode, Rising edge, Interrupt enable, Synchronize, Source -> CCI1A
     // Table 6-16 in the MSP430FR2355 datasheet shows that CCI1A = TB0.1 = P1.6
-	TB0CCTL1 = CAP + CM_1 + CCIE + SCS + CCIS_0;
+	TB0CCTL1 |= CAP + CM_1 + CCIE + SCS + CCIS_0;
 	// Clock -> SMCLK, Continuous mode, Clear timer
 	TB0CTL |= TBSSEL_2 + MC_2 + TBCLR;
 
@@ -40,7 +41,7 @@ void main(void) {
 
 		if(edge2 > edge1) {                         // Only calculate if no overflow occured
 			period = edge2 - edge1;             	// Calculate period
-			freq = 1000000L/period;
+			freq = 1000000L/period;                 // TODO: Explain L suffix
 		}
 		__no_operation();                     		// For inserting breakpoint in debugger
 	}
