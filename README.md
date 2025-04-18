@@ -21,7 +21,7 @@ TODO: Explain `__bis_SR_register()` and `__bic_SR_register()` intrinsics, how it
 | 10-timerBlink         | DOCS: Use internal timer and low frequency oscillator to blink LED
 | 13-softwarePWM        | DOCS: Implementation of PWM using software time delays
 | 14-pwmTest            | DOCS: Fading effect on onboard Green LED using hardware PWM
-| 15-timerCapture       | TEST: Uses the Input Capture mode of Timer to measure external signal period
+| 15-timerCapture       | DEBUG: Uses the Input Capture mode of Timer to measure external signal period
 | 16-adcTest            | DOCS: Reads the internal temperature sensor and converts value to Celcius
 | 17-dcoTest            | DOCS: Cycles through calibrated DCO frequencies during runtime
 | 18-adcPWM             | DOCS: Use ADC input to control intensity of onboard Green LED

@@ -26,10 +26,16 @@ void main(void) {
 
     PM5CTL0 &= ~LOCKLPM5;                           // Unlock GPIO
 
-    // TODO: Add more explanations
-    // Capture mode, Rising edge, Interrupt enable, Synchronize, Source -> CCI1A
+    /*
+     Unlike previous examples, here we are using the timer in Capture mode (as opposed to Compare mode).
+     In Capture mode, the timer will record the timer value on an input signal event (as opposed to Compare mode,
+     where an output signal changes based on the timer value). We tell the timer to capture the timer value on a rising or falling edge
+     of an input signal (or both). The user manual also recommends operating in synchronous mode to avoid race conditions (user manual, 14.2.4.1).
+     */
+
+    // Capture mode - synchronously record on rising edge, Interrupt enable, Source -> CCI1A
     // Table 6-16 in the MSP430FR2355 datasheet shows that CCI1A = TB0.1 = P1.6
-	TB0CCTL1 |= CAP + CM_1 + CCIE + SCS + CCIS_0;
+	TB0CCTL1 |= (CAP + SCS + CM_1) + CCIE + CCIS_0;
 	// Clock -> SMCLK, Continuous mode, Clear timer
 	TB0CTL |= TBSSEL_2 + MC_2 + TBCLR;
 
@@ -41,7 +47,7 @@ void main(void) {
 
 		if(edge2 > edge1) {                         // Only calculate if no overflow occured
 			period = edge2 - edge1;             	// Calculate period
-			freq = 1000000L/period;                 // TODO: Explain L suffix
+			freq = 1000000UL / period;              // Note: The 'UL' suffix makes the literal an 'unsigned long'. Literals are signed unless specified.
 		}
 		__no_operation();                     		// For inserting breakpoint in debugger
 	}
@@ -52,7 +58,7 @@ void main(void) {
 // us to the definition, where a comment labels it as 0xFFF6.
 #pragma vector = TIMER0_B1_VECTOR
 __interrupt void TIMER0_B1_ISR (void) {
-    if (TB0IV == TB0IV_TBCCR1) {                        // Check if TACCR1 generated this interrupt
+    if (TB0IV & TB0IV_TBCCR1) {                        // Check if TACCR1 generated this interrupt
         if (first_edge) {
             edge1 = TB0CCR1;                            // Store timer value of 1st edge
             first_edge = false;                         // Increment count
@@ -62,5 +68,6 @@ __interrupt void TIMER0_B1_ISR (void) {
             first_edge = true;                          // Reset flag
             __bic_SR_register_on_exit(LPM0_bits + GIE); // Exit LPM0 on return to main
         }
+        TB0CCTL1 &= ~CCIFG;                             // Clear interrupt flag
     }
 }
