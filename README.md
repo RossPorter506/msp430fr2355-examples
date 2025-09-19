@@ -1,5 +1,19 @@
 # MSP430 CCS Code Examples
-Various Code Examples for the MSP430FR2355.
+Various Code Examples for the MSP430FR2355 LaunchPad Development Kit along with useful links.
+
+The dev kit for the MSP430FR2355 shown below. 
+![MSP430FR2355 DEV KIT](image.png)
+
+There are two LEDs located on the bottom right of the board labeled 'LED1' which is the red LED and 'LED2' which is the green LED. 
+There is also two buttons, on the left middle, P4.1 and the right middle label P2.3. 
+
+# Useful Links
+
+[MSP430FR4xx and MSP430FR2xx family user's guide (Rev. I)](https://www.ti.com/lit/ug/slau445i/slau445i.pdf?ts=1758248219856&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FMSP430FR2355)
+[MSP430FR235x, MSP430FR215x Mixed-Signal Microcontrollers datasheet (Rev. D)](https://www.ti.com/lit/ds/symlink/msp430fr2355.pdf?ts=1758179932428&ref_url=https%253A%252F%252Fwww.ti.com%252Fproduct%252FMSP430FR2355)
+[MSP430FR2355 LaunchPad™ Development Kit (MSP-EXP430FR2355) User's Guide](https://www.ti.com/lit/ug/slau680/slau680.pdf)
+
+
 
 TODO: These example projects will be adapted from the forked repo, which uses the MSP430G2553 instead. Projects with 'TODO:' below have not yet been adjusted. Projects with 'TEST:' have not yet been tested. Projects with 'DOC:' have been tested to work, but probably need a second pair of eyes to add explanations where necessary. 
 
