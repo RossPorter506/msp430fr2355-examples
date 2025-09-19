@@ -41,3 +41,5 @@ Release/
 .launches/
 .metadata/
 RemoteSystemsTempFiles/
+.clangd
+.DS_Store
