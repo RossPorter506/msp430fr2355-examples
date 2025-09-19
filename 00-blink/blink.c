@@ -4,11 +4,11 @@
 //  Description; Toggle P1.0 by xor'ing P1.0 inside of a software loop.
 //  ACLK = n/a, MCLK = SMCLK = default DCO
 //
-//                MSP430x5xx
+//                MSP430FR2355
 //             -----------------
-//         /|\|              XIN|-
+//         /|\|                 |
 //          | |                 |
-//          --|RST          XOUT|-
+//          --|RST              |
 //            |                 |
 //            |             P1.0|-->LED
 //
@@ -18,23 +18,28 @@
 //  Built with Code Composer Studio v5
 //***************************************************************************************
 
-#include <msp430.h>				
+#include <msp430.h>
 #include <stdint.h>
 
-void main(void) {
-    // Stop the watchdog timer. We discuss the watchdog in a later example.
-    WDTCTL = WDTPW | WDTHOLD;
+void main(void)
+{
+	// Stop the watchdog timer. We discuss the watchdog in a later example.
+	WDTCTL = WDTPW | WDTHOLD;
 
 	// To power the LED we must set pin P1.0 into output pin mode
-    // P1DIR is a register that contains the pin direction info for each pin in port 1
-    // Each of the pins is represented as a single bit in the register.
-    // When a pin's bit is zero, the pin is an input, otherwise it's an output.
-    // See PxDIR in the 'MSP430FR4xx and MSP430FR2xx Family User's Guide' for more info.
-    // P1DIR = 0b00000000
-    //                  ^--- P1.0 direction
-    //           ^---------- P1.7 direction
-    // Non-destructively write to the least significant bit in the register.
+	// P1DIR is a register that contains the pin direction info for each pin in port 1
+	// Each of the pins is represented as a single bit in the register.
+	// When a pin's bit is zero, the pin is an input, otherwise it's an output.
+	// See PxDIR in the 'MSP430FR4xx and MSP430FR2xx Family User's Guide' for more info.
+	// P1DIR = 0b00000000
+	//                  ^--- P1.0 direction
+	//           ^---------- P1.7 direction
+	// Non-destructively write to the least significant bit in the register.
 	P1DIR |= 0b00000001; // For learning purposes we write the bit location manually, but later we will use the BITX macros for this.
+	// Note the '0b' here indicates writing to the P1DIR register in binary (hence the b).
+	// You may also commonly see '0x' which is for writing in hexadecimal, for example 0x01.
+	// Same with writing in base 10 decimal, just writing a '1'.
+	// 0b00000001, 0x01 and 1 are equivalent to each other as they are the same number just in different bases.
 
 	//    P1DIR |= 0b00000001
 	// => P1DIR = P1DIR | 0b00000001
@@ -47,19 +52,21 @@ void main(void) {
 	// This is a feature unique to the MSP430 to minimise power consumption. See section 8.3.1 in the user manual for more info.
 	PM5CTL0 &= ~LOCKLPM5;
 
-	while(1) {
-	    // To control whether an output pin in port 1 is high or low we use P1OUT
-	    // Like P1DIR, each bit in P1OUT controls the output level of each pin in port 1.
-	    // Changing PxOUT has no effect unless the pin has been configured as an output!!
-	    // See PxOUT in the 'MSP430FR4xx and MSP430FR2xx Family User's Guide' for more info.
-	    // Toggle P1.0 using exclusive-OR
-	    P1OUT ^= 1; // Note that 0b00000001 = 1
+	while (1)
+	{
+		// To control whether an output pin in port 1 is high or low we use P1OUT
+		// Like P1DIR, each bit in P1OUT controls the output level of each pin in port 1.
+		// Changing PxOUT has no effect unless the pin has been configured as an output!!
+		// See PxOUT in the 'MSP430FR4xx and MSP430FR2xx Family User's Guide' for more info.
+		// Toggle P1.0 using exclusive-OR
+		P1OUT ^= 1; // Note that 0b00000001 = 1
 
-        // A crude software-based delay loop.
-	    // In later examples we will use a special delay function.
-		volatile uint16_t i = 0;	// volatile to prevent compiler optimization
-		while(i < 50000) {
-            i++;
-        }
+		// A crude software-based delay loop.
+		// In later examples we will use a special delay function.
+		volatile uint16_t i = 0; // volatile to prevent compiler optimization
+		while (i < 50000)
+		{
+			i++;
+		}
 	}
 }
