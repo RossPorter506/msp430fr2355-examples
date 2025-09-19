@@ -28,6 +28,7 @@ Various Code Examples for the MSP430FR2355 LaunchPad Development Kit along with 
 | 21-spiShift           | TEST: Use SPI protocol to send data to a shift register
 | 22-i2cTempSensor      | TEST: Read temperature values from a LM75 sensor over I2C
 | 23-helloLCD           | TEST: Connects to a 16x2 LCD using 4-bit mode, generic library .c & .h files
+| 24-spiLoopback        | DOCS: Transmits byte from MOSI to MISO on the same dev board
 
 ## Dev Kit
 The dev kit for the MSP430FR2355 shown below. 
