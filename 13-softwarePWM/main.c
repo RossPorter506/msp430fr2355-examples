@@ -51,6 +51,11 @@ void main(void)
 
 	PM5CTL0 &= ~LOCKLPM5; // Unlock GPIO
 
+    // As an explanation of the code below:
+    // In the first for loop, as onTime increases, the second delay will decrease as PWM_PERIOD is constant.
+    // This means the LED is on for longer and off for shorter, increasing the intensity.
+    // In the second for loop, as onTime decreases, the second delay will increase.
+    // This means the LED is on for shorter and off for longer, decreasing the intensity.
 	while (1)
 	{
 		for (uint16_t onTime = 1; onTime < PWM_PERIOD; onTime++)
