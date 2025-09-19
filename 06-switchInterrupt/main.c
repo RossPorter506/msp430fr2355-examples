@@ -30,7 +30,7 @@ void main(void) {
     __bis_SR_register(LPM4_bits + GIE);	// Enter LPM4 and enable CPU interrupt
 }
 
-// This function runs whenever any GPIO interrupts occur on port 2.
+// Below is the interrupt function that runs whenever any GPIO interrupt occurs on port 2.
 // Because we only enabled interrupts on P2.3, we don't need to check which pin
 // produced the interrupt.
 // C was not really designed with interrupts in mind, so this code looks a bit weird:
@@ -42,3 +42,16 @@ __interrupt void Port_2(void) {
     // the interrupt will immediately fire again.
 	P2IFG &= ~SW;						// Clear SW interrupt flag
 }
+
+// For your understanding, a generic template for an interrupt function looks like this:
+
+// #pragma vector=INTERRUPT_VECTOR_NAME
+// __interrupt void INTERRUPT_FUNCTION_NAME(void) {
+//     // Code to run when the interrupt occurs
+// }
+
+// Where:
+// - INTERRUPT_VECTOR_NAME is the name of the interrupt vector (e.g., PORT2_VECTOR)
+//   You will need to find the correct vector name in the microcontroller's datasheet or user guide.
+// - INTERRUPT_FUNCTION_NAME is the name of the function that will be called when the interrupt occurs, 
+//   You never call this function directly; the microcontroller calls it automatically when the interrupt occurs.
