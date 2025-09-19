@@ -27,7 +27,7 @@ void main(void) {
 
     while(1) {
         // The pin will be 0 when the switch is pressed, 
-        // so when the switch is NOT pressed then (P1IN & BIT3) will be non-zero (true).
+        // so when the switch is NOT pressed then (P2IN & BIT3) will be non-zero (true).
     	if(P2IN & BIT3) {		// If SW is NOT pressed
     		P1OUT &= ~BIT0;		// LED OFF
         }

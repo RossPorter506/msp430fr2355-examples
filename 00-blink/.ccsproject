@@ -11,4 +11,5 @@
 	<createSlaveProjects value=""/>
 	<templateProperties value="id=com.ti.ccstudio.project.templates.blink_msp430,"/>
 	<isTargetManual value="false"/>
+	<activeTargetConfiguration value="targetConfigs/MSP430FR2355.ccxml"/>
 </projectOptions>
