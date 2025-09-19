@@ -8,9 +8,17 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+// The 'volatile' keyword tells the compiler that a variable may change at any time, 
+// such as from hardware, interrupts, or other threads. Without 'volatile', the compiler 
+// might optimize code by assuming the variable does not change unexpectedly, which can 
+// lead to incorrect behavior. This is especially important for variables shared with 
+// ISRs, hardware registers, or in multithreaded code.
+// See website below for a detailed explanation:
+// https://medium.com/@shadababe04/volatile-embedded-syatem-a9bf83b19591
+
 // Global variables. Because first_edge, edge1 and edge2 are changed in the ISR below they must be marked volatile.
 volatile bool first_edge;
-volatile uint16_t edge1, edge2;
+volatile uint16_t edge2;
 
 // These ones technically don't need to be global, but it makes it easier to view them while debugging if they're global.
 uint16_t period;
@@ -45,10 +53,9 @@ void main(void) {
 
 		//Exits LPM0 after 2 rising edges are captured
 
-		if(edge2 > edge1) {                         // Only calculate if no overflow occured
-			period = edge2 - edge1;             	// Calculate period
+			period = edge2;             	// Calculate period
 			freq = 1000000UL / period;              // Note: The 'UL' suffix makes the literal an 'unsigned long'. Literals are signed unless specified.
-		}
+		
 		__no_operation();                     		// For inserting breakpoint in debugger
 	}
 }
@@ -60,12 +67,14 @@ void main(void) {
 __interrupt void TIMER0_B1_ISR (void) {
     if (TB0IV & TB0IV_TBCCR1) {                        // Check if TACCR1 generated this interrupt
         if (first_edge) {
-            edge1 = TB0CCR1;                            // Store timer value of 1st edge
             first_edge = false;                         // Increment count
+            TB0CTL |= TBCLR;                            // Clear the Timer0 Counter register to avoid overflow between captures
+
         }
         else {
             edge2 = TB0CCR1;                            // Store timer value of 2nd edge
             first_edge = true;                          // Reset flag
+
             __bic_SR_register_on_exit(LPM0_bits + GIE); // Exit LPM0 on return to main
         }
         TB0CCTL1 &= ~CCIFG;                             // Clear interrupt flag
