@@ -51,9 +51,9 @@ void main(void)
 	*/
 
 	TB0CCR0 = PWM_PERIOD;	  // Set Timer B0 PWM max point
-	TB0CCTL1 = OUTMOD_7;	  // Set TB0.1 to Reset/Set mode
+	TB0CCTL1 = OUTMOD_7;	  // Set TB0.1 to Reset/Set mode (See Table 13-2 Output Modes in user guide for more info)
 	TB0CCR1 = 1;			  // Set TB0.1 PWM toggle point to 1 initially (almost 100% on)
-	TB0CTL = TBSSEL_2 + MC_1; // Timer Clock -> SMCLK, Mode -> Count up
+	TB0CTL = TBSSEL_2 + MC_1; // Timer Clock -> SMCLK, Mode -> Count up (see Table 13-1 Timer Modes in user guide for more info)
 
 	PM5CTL0 &= ~LOCKLPM5; // Unlock GPIO
 
