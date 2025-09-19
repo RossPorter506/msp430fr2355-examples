@@ -12,10 +12,10 @@ Various Code Examples for the MSP430FR2355 LaunchPad Development Kit along with 
 | 05-switchAlternate    | DOCS: Toggle between Red and Green LED using onboard Switch
 | 06-switchInterrupt    | DOCS: Toggle LED using external interrupt and low power modes 
 | 07-blinkWatchdog      | DOCS: Illustrates the Watchdog Timer timeout and reset 
-| 08-timerBlink         | DOCS: Use internal timer and low frequency oscillator to blink LED
-| 09-softwarePWM        | DOCS: Implementation of PWM using software time delays
-| 10-pwmTest            | DOCS: Fading effect on onboard Green LED using hardware PWM
-| 11-timerCapture       | DEBUG: Uses the Input Capture mode of Timer to measure external signal period
+| 08-timerBlink         | DOCS: Use internal timer and low frequency oscillator to blink onboard red LED
+| 09-softwarePWM        | DOCS: Implementation of PWM using software time delays on a onboard red LED
+| 10-pwmTest            | DOCS: Fading effect on external Green LED using hardware PWM
+| 11-timerCapture       | DOCS: Uses the Input Capture mode of Timer to measure external signal period
 | 12-adcTest            | DOCS: Reads the internal temperature sensor and converts value to Celcius
 | 13-dcoTest            | DOCS: Cycles through calibrated DCO frequencies during runtime
 | 14-adcPWM             | DOCS: Use ADC input to control intensity of onboard Green LED
