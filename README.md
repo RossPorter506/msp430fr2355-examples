@@ -1,6 +1,12 @@
 # MSP430 CCS Code Examples
 Various Code Examples for the MSP430FR2355 LaunchPad Development Kit along with useful links.
 
+# How to Use
+
+This repository contains a list of Code Composer Studio projects. You can find a link to download CCS [here](https://www.ti.com/tool/CCSTUDIO). 
+To open the projects use File > Import Projects and point it to where you downloaded this repository. It should automatically discover and list all of the projects contained within. 
+After importing the projects you can then open a project and build or flash them.
+
 ## List of Examples
 | Project Name          | Description   |
 | ----------------------|---------------|
